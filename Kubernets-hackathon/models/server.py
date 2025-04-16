@@ -1,6 +1,7 @@
 from flask import Flask, jsonify
 from flask_cors import CORS
 import nbformat
+import os
 
 app = Flask(__name__)
 CORS(app)  # Enables CORS for frontend requests
@@ -27,7 +28,7 @@ def extract_outputs(notebook_path):
 @app.route('/get-notebook-output', methods=['GET'])
 def get_notebook_output():
     """API endpoint to return formatted notebook outputs in JSON format."""
-    notebook_path = "KubeAI2.ipynb"  # Ensure the correct notebook path
+    notebook_path = "KubeAI2.ipynb"  # Make sure this file is in the same directory
     outputs = extract_outputs(notebook_path)
     
     # Returning formatted JSON response
@@ -38,4 +39,5 @@ def get_notebook_output():
     return jsonify(response)
 
 if __name__ == '__main__':
-    app.run(debug=True, host="0.0.0.0", port=5000)  # Runs server on port 5000
+    port = int(os.environ.get("PORT", 5000))  # Use Render's dynamic port if available
+    app.run(debug=False, host="0.0.0.0", port=port)
