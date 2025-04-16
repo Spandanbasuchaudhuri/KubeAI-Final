@@ -1,0 +1,27 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: iperf-server
+  namespace: monitoring
+  labels:
+    app: iperf-server
+spec:
+  containers:
+  - name: iperf-server
+    image: networkstatic/iperf3
+    command: ["iperf3", "-s"]
+    ports:
+    - containerPort: 5201
+  restartPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: iperf-server
+  namespace: monitoring
+spec:
+  selector:
+    app: iperf-server
+  ports:
+  - port: 5201
+    targetPort: 5201

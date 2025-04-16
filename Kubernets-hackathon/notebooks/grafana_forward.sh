@@ -1,0 +1,1 @@
+kubectl port-forward svc/grafana -n monitoring 3001:80

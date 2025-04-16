@@ -1,0 +1,22 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: iperf-client
+  namespace: monitoring
+  labels:
+    app: iperf-client
+spec:
+  containers:
+  - name: iperf-client
+    image: networkstatic/iperf3
+    command: ["sh", "-c"]
+    args:
+      - |
+        echo "Waiting for iperf-server..."; \
+        sleep 5; \
+        while true; do \
+          echo "Running iperf3 test..."; \
+          iperf3 -c iperf-server.monitoring.svc.cluster.local -t 10 || echo "Connection failed"; \
+          sleep 30; \
+        done
+  restartPolicy: Always
